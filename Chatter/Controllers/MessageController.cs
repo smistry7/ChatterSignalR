@@ -1,4 +1,5 @@
 ﻿using Chatter.BusinessLogic;
+using Chatter.BusinessLogic.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;

@@ -1,3 +1,4 @@
+using Chatter.API.Hubs;
 using Chatter.BusinessLogic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -36,6 +37,7 @@ namespace Chatter
             });
             services.AddDbContext<ChatterContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("ChatterContext")));
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,6 +59,7 @@ namespace Chatter
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<MessageHub>("/MessageHub");
             });
         }
     }

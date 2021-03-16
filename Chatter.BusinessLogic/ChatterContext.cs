@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Chatter.BusinessLogic.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -13,14 +14,5 @@ namespace Chatter.BusinessLogic
         {
         }
     }
-    public class Message
-    {
-        [Key]
-        public int MessageId { get; set; }
-        public string Text { get; set; }
-        public DateTime SentDate { get; set; }
-        public string SentBy { get; set; }
-        public int GroupId { get; set; }
-
-    }
+   
 }
