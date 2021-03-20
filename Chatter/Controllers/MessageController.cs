@@ -1,6 +1,8 @@
-﻿using Chatter.BusinessLogic;
+﻿using Chatter.API.Hubs;
+using Chatter.BusinessLogic;
 using Chatter.BusinessLogic.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -15,9 +17,11 @@ namespace Chatter.API.Controllers
     public class MessageController : ControllerBase
     {
         private readonly ChatterContext _chatterContext;
-        public MessageController(ChatterContext chatterContext)
+        private readonly IHubContext<MessageHub> _hubContext;
+        public MessageController(ChatterContext chatterContext, IHubContext<MessageHub> hubContext)
         {
             _chatterContext = chatterContext;
+            _hubContext = hubContext;
         }
         [HttpGet]
         public async Task<IActionResult> GetMessages()
@@ -32,6 +36,7 @@ namespace Chatter.API.Controllers
         {
             _chatterContext.Messages.Add(message);
             await _chatterContext.SaveChangesAsync();
+            await _hubContext.Clients.All.SendAsync("RecieveMessage", message);
             return Ok();
         }
 
