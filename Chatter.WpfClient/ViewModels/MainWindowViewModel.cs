@@ -9,14 +9,13 @@ using System.Threading.Tasks;
 
 namespace Chatter.WpfClient.ViewModels
 {
-    public class MainWindowViewModel : ViewModelBase, IObserver<Message>
+    public class MainWindowViewModel : ViewModelBase
     {
         ViewModelBase _content;
         private readonly IMessageService _messageService;
-        public MainWindowViewModel(IObservable<Message> messageObservable, IMessageService messageService)
+        public MainWindowViewModel(IMessageService messageService, MessageViewModel messageViewModel)
         {
-            _content = MessageViewModel = new MessageViewModel();
-            messageObservable.Subscribe(this);
+            _content = MessageViewModel = messageViewModel;
             _messageService = messageService;
             
         }
@@ -45,19 +44,6 @@ namespace Chatter.WpfClient.ViewModels
             Content = vm;
         }
 
-        public void OnCompleted()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnError(Exception error)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnNext(Message value)
-        {
-            this.MessageViewModel.Messages.Add(value);
-        }
+  
     }
 }

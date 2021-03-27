@@ -40,6 +40,7 @@ namespace Chatter.WpfClient
             services.AddSingleton<IObservable<Message>, MessageObservable>();
             services.AddTransient<IMessageService, MessageService>();
             services.AddSingleton<MainWindowViewModel>();
+            services.AddSingleton<MessageViewModel>();
             services.AddSingleton<MainWindow>();
             
         }

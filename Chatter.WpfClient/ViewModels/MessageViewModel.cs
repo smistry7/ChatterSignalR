@@ -9,15 +9,29 @@ using System.Threading.Tasks;
 
 namespace Chatter.WpfClient.ViewModels
 {
-    public class MessageViewModel : ViewModelBase
+    public class MessageViewModel : ViewModelBase, IObserver<Message>
     {
         public ObservableCollection<Message> Messages { get; }
-        private MessageService _messageService;
-        public MessageViewModel()
+
+        public MessageViewModel(IObservable<Message> messageObservable)
         {
-            _messageService = new MessageService();
             Messages = new ObservableCollection<Message>();
+            messageObservable.Subscribe(this);
         }
-        
+
+        public void OnCompleted()
+        {
+            throw new Exception("No more messages?");
+        }
+
+        public void OnError(Exception error)
+        {
+            throw new Exception("Error in SignalR Hub connection");
+        }
+
+        public void OnNext(Message value)
+        {
+            Messages.Add(value);
+        }
     }
 }
