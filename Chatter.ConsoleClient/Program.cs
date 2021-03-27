@@ -28,13 +28,13 @@ namespace Chatter.ConsoleClient
 
             _connection.On<Message>("RecieveMessage", (message) =>
             {
-                Console.WriteLine($"{message.SentBy}: {message.Text}");
+                Console.WriteLine(message);
             });
             await _connection.StartAsync();
 
             while(true)
             {
-                var message = new Message() { SentBy = "Shyam", GroupId = 1, SentDate = DateTime.Now };
+                var message = new Message() { SentBy = "Console", GroupId = 1, SentDate = DateTime.Now };
                 message.Text = Console.ReadLine();
                 var json = JsonConvert.SerializeObject(message);
                 var response = await http.PostAsync("/Message/SendMessage", new StringContent(json, Encoding.UTF8, "application/json"));

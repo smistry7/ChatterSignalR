@@ -1,0 +1,13 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Chatter.WpfClient.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="clr-namespace:Chatter.WpfClient.Views"
+        mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="300"
+        x:Class="Chatter.WpfClient.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Chatter.WpfClient"
+        Content="{Binding Content}">
+
+</Window>

@@ -15,6 +15,10 @@ namespace Chatter.BusinessLogic.Models
         public DateTime SentDate { get; set; }
         public string SentBy { get; set; }
         public int GroupId { get; set; }
+        public override string ToString()
+        {
+            return $"{this.SentBy}: {Text}"; 
+        }
 
     }
 }
