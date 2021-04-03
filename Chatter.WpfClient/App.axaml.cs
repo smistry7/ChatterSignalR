@@ -5,6 +5,7 @@ using Chatter.BusinessLogic.Models;
 using Chatter.WpfClient.Services;
 using Chatter.WpfClient.ViewModels;
 using Chatter.WpfClient.Views;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows;
@@ -21,8 +22,12 @@ namespace Chatter.WpfClient
 
         public override void OnFrameworkInitializationCompleted()
         {
+            var config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", true, true)
+                .Build();
+
             var serviceCollection = new ServiceCollection();
-            ConfigureServices(serviceCollection);
+            ConfigureServices(serviceCollection, config);
             _serviceProvider = serviceCollection.BuildServiceProvider();
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
@@ -35,10 +40,10 @@ namespace Chatter.WpfClient
 
             base.OnFrameworkInitializationCompleted();
         }
-        private void ConfigureServices(IServiceCollection services)
+        private void ConfigureServices(IServiceCollection services, IConfiguration config) 
         {
-            services.AddSingleton<IObservable<Message>, MessageObservable>();
-            services.AddTransient<IMessageService, MessageService>();
+            services.AddSingleton<IObservable<Message>>(x=> new MessageObservable(config["api_url"]));
+            services.AddTransient<IMessageService>(x => new MessageService(config["api_url"]));
             services.AddSingleton<MainWindowViewModel>();
             services.AddSingleton<MessageViewModel>();
             services.AddSingleton<MainWindow>();

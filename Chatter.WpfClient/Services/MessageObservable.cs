@@ -11,15 +11,15 @@ namespace Chatter.WpfClient.Services
     {
         private List<IObserver<Message>> _observers;
         private HubConnection _hubConnection;
-        private CancellationToken _cts { get; set; }
-        public MessageObservable()
+        
+        public MessageObservable(string apiurl)
         {
             _observers = new List<IObserver<Message>>();
             _hubConnection = new HubConnectionBuilder()
-                .WithUrl("https://localhost:44359/MessageHub")
+                .WithUrl(apiurl + "/MessageHub")
                 .Build();
             _hubConnection.On<Message>("RecieveMessage", OnMessage);
-            _hubConnection.StartAsync(_cts).ContinueWith(x=> { });
+            _hubConnection.StartAsync().ContinueWith(x => { });
         }
 
         public IDisposable Subscribe(IObserver<Message> observer)

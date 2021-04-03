@@ -12,11 +12,11 @@ namespace Chatter.WpfClient.Services
     public class MessageService : IMessageService
     {
         private HttpClient _http;
-        public MessageService()
+        public MessageService(string apiUrl)
         {
             _http = new HttpClient()
             {
-                BaseAddress = new Uri("https://localhost:44359")
+                BaseAddress = new Uri(apiUrl)
             };
 
         }
