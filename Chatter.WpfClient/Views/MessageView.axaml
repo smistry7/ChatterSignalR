@@ -5,8 +5,9 @@
              mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="400"
              x:Class="Chatter.WpfClient.Views.MessageView">
   <DockPanel>
+    <TextBox DockPanel.Dock="Bottom" Watermark="Enter Message" Text="{Binding Message}"></TextBox>
     <Button DockPanel.Dock="Bottom"
-            Command="{Binding $parent[Window].DataContext.AddItem}">Add an item</Button>
+            Command="{Binding SendMessage}">Send Message</Button>
     <ItemsControl Items="{Binding Messages}">
       <ItemsControl.ItemTemplate>
         <DataTemplate>

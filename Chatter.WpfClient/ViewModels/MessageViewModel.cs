@@ -6,6 +6,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ReactiveUI;
+using System.Reactive;
 
 namespace Chatter.WpfClient.ViewModels
 {
@@ -13,10 +15,32 @@ namespace Chatter.WpfClient.ViewModels
     {
         public ObservableCollection<Message> Messages { get; }
 
-        public MessageViewModel(IObservable<Message> messageObservable)
+        private readonly IMessageService _messageService;
+        public MessageViewModel(IObservable<Message> messageObservable, IMessageService messageService)
         {
             Messages = new ObservableCollection<Message>();
+            _messageService = messageService;
             messageObservable.Subscribe(this);
+            SetUpSendButton();
+        }
+
+        private void SetUpSendButton()
+        {
+            var sendEnabled = this.WhenAnyValue(
+                x => x.Message,
+                x => !string.IsNullOrWhiteSpace(x));
+            SendMessage = ReactiveCommand.CreateFromTask(async () =>
+            {
+                var message = new Message
+                {
+                    Text = Message,
+                    SentBy = "Avalonia",
+                    SentDate = DateTime.Now,
+                    GroupId = 1
+                };
+                await _messageService.SendMessage(message).ConfigureAwait(false);
+                Message = "";
+            });
         }
 
         public void OnCompleted()
@@ -32,6 +56,19 @@ namespace Chatter.WpfClient.ViewModels
         public void OnNext(Message value)
         {
             Messages.Add(value);
+        }
+        public ReactiveCommand<Unit, Unit> SendMessage { get; private set; }
+        private string _message;
+        public string Message
+        {
+            get
+            {
+                return _message;
+            }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _message, value);
+            }
         }
     }
 }
