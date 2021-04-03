@@ -11,7 +11,7 @@
     <ItemsControl Items="{Binding Messages}">
       <ItemsControl.ItemTemplate>
         <DataTemplate>
-          <CheckBox Margin="4" Content="{Binding}"/>
+          <Label Margin="4"  Content="{Binding}"></Label>
         </DataTemplate>
       </ItemsControl.ItemTemplate>
     </ItemsControl>
