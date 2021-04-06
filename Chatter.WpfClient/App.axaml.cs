@@ -42,8 +42,9 @@ namespace Chatter.WpfClient
         }
         private void ConfigureServices(IServiceCollection services, IConfiguration config) 
         {
-            services.AddSingleton<IObservable<Message>>(x=> new MessageObservable(config["api_url"]));
-            services.AddTransient<IMessageService>(x => new MessageService(config["api_url"]));
+            var apiUrl = config["api_url"];
+            services.AddSingleton<IObservable<Message>>(x=> new MessageObservable(apiUrl));
+            services.AddTransient<IMessageService>(x => new MessageService(apiUrl));
             services.AddSingleton<MainWindowViewModel>();
             services.AddSingleton<MessageViewModel>();
             services.AddSingleton<MainWindow>();

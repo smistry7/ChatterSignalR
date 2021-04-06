@@ -38,6 +38,13 @@ namespace Chatter
             services.AddDbContext<ChatterContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("ChatterContext")));
             services.AddSignalR();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("Cors", builder =>
+                {
+                    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().Build();
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,7 +62,7 @@ namespace Chatter
             app.UseRouting();
 
             app.UseAuthorization();
-
+            app.UseCors("Cors");
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

@@ -1,0 +1,83 @@
+﻿@page "/fetchdata"
+@using Chatter.BusinessLogic.Models;
+@using Newtonsoft.Json;
+@using System.Text;
+@using System.Linq;
+@using Microsoft.AspNetCore.SignalR.Client;
+@inject HttpClient Http
+@implements IAsyncDisposable
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+@if (forecasts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="col-8">Message</th>
+                <th class="col-4">Sent By</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var forecast in forecasts)
+            {
+                <tr>
+                    <td class="col-8">@forecast.Text</td>
+                    <td class="col-4">@forecast.SentBy</td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+    <div class="container">
+        <div class="row">
+            <input class="col-md-8" @bind="_messageText" type="text" />
+            <button @onclick="SendMessage">Send</button>
+        </div>
+    </div>
+}
+
+@code {
+    private List<Message> forecasts;
+    private string _messageText;
+    private HubConnection _hubConnection;
+    protected override async Task OnInitializedAsync()
+    {
+        forecasts = await Http.GetFromJsonAsync<List<Message>>("message/getmessages");
+        _hubConnection = new HubConnectionBuilder()
+            .WithUrl("https://localhost:44359/MessageHub")
+            .Build();
+        _hubConnection.On<Message>("RecieveMessage", OnMessage);
+        await _hubConnection.StartAsync();
+        forecasts.Reverse();
+    }
+    public async Task SendMessage()
+    {
+        var message = new Message
+        {
+            Text = _messageText,
+            SentBy = "Blazor",
+            SentDate = DateTime.Now,
+            GroupId = 1
+        };
+        var json = JsonConvert.SerializeObject(message);
+        var response = await Http.PostAsync("/Message/SendMessage",
+            new StringContent(json, Encoding.UTF8, "application/json"));
+        _messageText = "";
+    }
+    private void OnMessage(Message message)
+    {
+        forecasts.Add(message);
+    }
+    public async ValueTask DisposeAsync()
+    {
+        await _hubConnection.DisposeAsync();
+    }
+}

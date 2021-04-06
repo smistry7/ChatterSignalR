@@ -24,7 +24,7 @@ namespace Chatter.API.Controllers
             _hubContext = hubContext;
         }
         [HttpGet]
-        public async Task<IActionResult> GetMessages()
+        public IActionResult GetMessages()
         {
             var messages = _chatterContext.Messages
                 .OrderByDescending(x => x.SentDate)
