@@ -17,16 +17,17 @@ namespace Chatter.API.Controllers
     public class MessageController : ControllerBase
     {
         private readonly ChatterContext _chatterContext;
-        private readonly IHubContext<MessageHub> _hubContext;
-        public MessageController(ChatterContext chatterContext, IHubContext<MessageHub> hubContext)
+        private readonly IHubContext<MessageHub, IChatClient> _hubContext;
+        public MessageController(ChatterContext chatterContext, IHubContext<MessageHub, IChatClient> hubContext)
         {
             _chatterContext = chatterContext;
             _hubContext = hubContext;
         }
         [HttpGet]
-        public IActionResult GetMessages()
+        public IActionResult GetMessages(int groupId)
         {
             var messages = _chatterContext.Messages
+                .Where(m => m.GroupId == groupId)
                 .OrderByDescending(x => x.SentDate)
                 .Take(10);
             return Ok(messages);
@@ -35,8 +36,14 @@ namespace Chatter.API.Controllers
         public async Task<IActionResult> SendMessage([FromBody] Message message)
         {
             _chatterContext.Messages.Add(message);
-            await _chatterContext.SaveChangesAsync();
-            await _hubContext.Clients.All.SendAsync("RecieveMessage", message);
+            await _chatterContext
+                .SaveChangesAsync()
+                .ConfigureAwait(false);
+            await _hubContext
+                .Clients
+                .Group(message.GroupId.ToString())
+                .RecieveMessage(message)
+                .ConfigureAwait(false);
             return Ok();
         }
 

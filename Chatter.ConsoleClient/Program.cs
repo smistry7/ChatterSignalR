@@ -38,16 +38,20 @@ namespace Chatter.ConsoleClient
             });
             await _connection.StartAsync();
 
+            Console.WriteLine("please enter the id of the group you want to join");
+            var groupId = int.Parse(Console.ReadLine());
+            await _connection.SendAsync("JoinGroup", groupId);
+
             while (true)
             {
-                var message = new Message() { SentBy = "Console", GroupId = 1, SentDate = DateTime.Now };
+                var message = new Message() { SentBy = "Console", GroupId = groupId, SentDate = DateTime.Now };
                 message.Text = Console.ReadLine();
                 Console.SetCursorPosition(Console.CursorLeft, Console.CursorTop - 1);
                 var json = JsonConvert.SerializeObject(message);
-                var response = await http.PostAsync("/Message/SendMessage", 
+                var response = await http.PostAsync("/Message/SendMessage",
                     new StringContent(json, Encoding.UTF8, "application/json"));
             }
         }
-  
+
     }
 }
