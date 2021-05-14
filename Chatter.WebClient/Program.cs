@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Blazored.Modal;
+using Chatter.WebClient.Services;
 
 namespace Chatter.WebClient
 {
@@ -17,8 +19,9 @@ namespace Chatter.WebClient
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
 
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:44359") });
-
+            builder.Services.AddSingleton(sp => new HttpClient { BaseAddress = new Uri("https://localhost:44359") });
+            builder.Services.AddBlazoredModal();
+            builder.Services.AddSingleton<IHubConnectionProvider, HubConnectionProvider>();
             await builder.Build().RunAsync();
         }
     }

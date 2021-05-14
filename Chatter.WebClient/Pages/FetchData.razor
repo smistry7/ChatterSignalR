@@ -4,14 +4,14 @@
 @using System.Text;
 @using System.Linq;
 @using Microsoft.AspNetCore.SignalR.Client;
+@using Chatter.WebClient.Services;
 @inject HttpClient Http
-@implements IAsyncDisposable
+@implements IObserver<Message>
+@inject IHubConnectionProvider _hubConnection
 
-<h1>Weather forecast</h1>
+<h1>Blazor Chatter Client</h1>
 
-<p>This component demonstrates fetching data from the server.</p>
-
-@if (forecasts == null)
+@if (_messages == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -26,11 +26,11 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var forecast in forecasts)
+            @foreach (var message in _messages)
             {
                 <tr>
-                    <td class="col-8">@forecast.Text</td>
-                    <td class="col-4">@forecast.SentBy</td>
+                    <td class="col-8">@message.Text</td>
+                    <td class="col-4">@message.SentBy</td>
                 </tr>
             }
         </tbody>
@@ -45,19 +45,20 @@ else
 }
 
 @code {
-    private List<Message> forecasts;
+    [CascadingParameter]
+    public IModalService Modal { get; set; }
+    private List<Message> _messages;
     private string _messageText;
-    private HubConnection _hubConnection;
     protected override async Task OnInitializedAsync()
     {
-        forecasts = await Http.GetFromJsonAsync<List<Message>>("message/getmessages");
-        _hubConnection = new HubConnectionBuilder()
-            .WithUrl("https://localhost:44359/MessageHub")
-            .Build();
-        _hubConnection.On<Message>("RecieveMessage", OnMessage);
-        await _hubConnection.StartAsync();
-        forecasts.Reverse();
+        _messages = await Http.GetFromJsonAsync<List<Message>>("message/getmessages");
+        await _hubConnection.BuildSignalrConnection();
+        _hubConnection.Subscribe(this);
+
+        _messages.Reverse();
+        Modal.Show<Counter>("Counter");
     }
+
     public async Task SendMessage()
     {
         var message = new Message
@@ -72,12 +73,22 @@ else
             new StringContent(json, Encoding.UTF8, "application/json"));
         _messageText = "";
     }
-    private void OnMessage(Message message)
+    
+    public void OnCompleted()
     {
-        forecasts.Add(message);
+       //completed!!!
     }
-    public async ValueTask DisposeAsync()
+
+    public void OnError(Exception e)
     {
-        await _hubConnection.DisposeAsync();
+        // !!!!Error!!!
     }
+
+    public void OnNext(Message message)
+    {
+        _messages.Add(message);
+        StateHasChanged();
+    }
+
+
 }

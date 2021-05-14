@@ -1,16 +1,22 @@
 ﻿@page "/counter"
+@using Chatter.WebClient.Services;
+@inject IHubConnectionProvider _hubConnection
+<h1>Select a group!</h1>
+<div class="form-group">
+    <label for="groupid">Group id</label>
+    <input type="text" @bind="GroupId" class="form-control" id="groupid" />
+</div>
 
-<h1>Counter</h1>
 
-<p>Current count: @currentCount</p>
-
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<button class="btn btn-primary" @onclick="JoinGroup">Join</button>
 
 @code {
-    private int currentCount = 0;
-
-    private void IncrementCount()
+    [CascadingParameter]
+    BlazoredModalInstance ModalInstance { get; set; }
+    public int GroupId { get; set; }
+    private async Task JoinGroup()
     {
-        currentCount++;
+        await _hubConnection.JoinGroup(GroupId);
+        await ModalInstance.CloseAsync();
     }
 }
