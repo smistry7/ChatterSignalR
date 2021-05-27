@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chatter.ConsoleClient", "Ch
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chatter.WpfClient", "Chatter.WpfClient\Chatter.WpfClient.csproj", "{219DDEAB-E8D3-496E-8B2A-0EDD5E2680AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatter.WebClient", "Chatter.WebClient\Chatter.WebClient.csproj", "{4912DB2C-2CD5-4FEC-BE00-AB389E373B30}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chatter.WebClient", "Chatter.WebClient\Chatter.WebClient.csproj", "{4912DB2C-2CD5-4FEC-BE00-AB389E373B30}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatter.Test", "Chatter.Test\Chatter.Test.csproj", "{6B52AA3B-0E41-488C-9AB9-7A411E5A6967}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{4912DB2C-2CD5-4FEC-BE00-AB389E373B30}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4912DB2C-2CD5-4FEC-BE00-AB389E373B30}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4912DB2C-2CD5-4FEC-BE00-AB389E373B30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B52AA3B-0E41-488C-9AB9-7A411E5A6967}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B52AA3B-0E41-488C-9AB9-7A411E5A6967}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B52AA3B-0E41-488C-9AB9-7A411E5A6967}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B52AA3B-0E41-488C-9AB9-7A411E5A6967}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
