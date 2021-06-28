@@ -31,13 +31,19 @@ namespace Chatter.API.Controllers
                 .Take(10);
             return Ok(messages);
         }
+        [HttpGet]
+        public async Task<IActionResult> GetMessage([FromQuery] int id)
+        {
+            var message = await _chatterContext.Messages.FindAsync(id).ConfigureAwait(false);
+            return Ok(message);
+        }
         [HttpPost]
         public async Task<IActionResult> SendMessage([FromBody] Message message)
         {
-            _chatterContext.Messages.Add(message);
+            var res = _chatterContext.Messages.Add(message);
             await _chatterContext.SaveChangesAsync();
             await _hubContext.Clients.All.SendAsync("RecieveMessage", message);
-            return Ok();
+            return Ok(res.Entity.MessageId);
         }
 
     }
