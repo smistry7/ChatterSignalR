@@ -1,4 +1,5 @@
-﻿using Chatter.BusinessLogic.Models;
+﻿using Chatter.APIClient;
+using Chatter.BusinessLogic.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -11,27 +12,25 @@ namespace Chatter.WpfClient.Services
 {
     public class MessageService : IMessageService
     {
-        private HttpClient _http;
+        private IChatterApi _http;
         public MessageService(string apiUrl)
         {
-            _http = new HttpClient()
+            var http = new HttpClient()
             {
                 BaseAddress = new Uri(apiUrl)
             };
+            _http = new ApiClientFactory(http).BuildChatterApi();
 
         }
         public async Task SendMessage(Message message)
         {
-            var json = JsonConvert.SerializeObject(message);
-            await _http.PostAsync("/Message/SendMessage", new StringContent(json, Encoding.UTF8, "application/json"));
+            await _http.SendMessage(message);
         }
         public async Task<IEnumerable<Message>> GetMessages()
         {
-            var response = await _http.GetAsync("Message/GetMessages");
-            return JsonConvert.DeserializeObject<IEnumerable<Message>>(await response.Content.ReadAsStringAsync());
+            var response = await _http.GetMessages();
+            return response;
         }
-
-
     }
 }
 

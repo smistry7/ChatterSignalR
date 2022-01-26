@@ -1,4 +1,5 @@
-﻿using Chatter.BusinessLogic.Models;
+﻿using Chatter.APIClient;
+using Chatter.BusinessLogic.Models;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -21,7 +22,7 @@ namespace Chatter.ConsoleClient
 
             HttpClient http = new HttpClient();
             http.BaseAddress = new Uri(apiUrl);
-
+            var chatterHttpClient = new ApiClientFactory(http).BuildChatterApi();
             HubConnection _connection = new HubConnectionBuilder()
                 .WithUrl(apiUrl + "/MessageHub")
                 .Build();
@@ -44,8 +45,7 @@ namespace Chatter.ConsoleClient
                 message.Text = Console.ReadLine();
                 Console.SetCursorPosition(Console.CursorLeft, Console.CursorTop - 1);
                 var json = JsonConvert.SerializeObject(message);
-                var response = await http.PostAsync("/Message/SendMessage", 
-                    new StringContent(json, Encoding.UTF8, "application/json"));
+                var response = await chatterHttpClient.SendMessage(message);
             }
         }
   

@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Chatter.APIClient\Chatter.APIClient.csproj" />
     <ProjectReference Include="..\Chatter.BusinessLogic\Chatter.BusinessLogic.csproj" />
   </ItemGroup>
 

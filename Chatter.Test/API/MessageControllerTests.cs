@@ -37,7 +37,7 @@ namespace Chatter.Test.API
         }
         [Theory, AutoData]
         [Trait("Category", "Integration")]
-        public async Task SendMessage_AppliesDatabaseInsert(APIClient.Message message)
+        public async Task SendMessage_AppliesDatabaseInsert(Message message)
         {
             // Arrange
             // override messageId as we don't want to insert that to the database.

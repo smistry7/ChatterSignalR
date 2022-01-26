@@ -13,4 +13,8 @@
     <PackageReference Include="Refit.Newtonsoft.Json" Version="6.1.15" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Chatter.BusinessLogic\Chatter.BusinessLogic.csproj" />
+  </ItemGroup>
+
 </Project>

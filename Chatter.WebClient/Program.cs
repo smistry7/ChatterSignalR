@@ -1,3 +1,4 @@
+using Chatter.APIClient;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,8 +17,10 @@ namespace Chatter.WebClient
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
+            var http = new HttpClient { BaseAddress = new Uri("https://localhost:44359") };
+            var chatterHttpClient = new ApiClientFactory(http).BuildChatterApi();
 
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:44359") });
+            builder.Services.AddScoped(sp => chatterHttpClient);
 
             await builder.Build().RunAsync();
         }

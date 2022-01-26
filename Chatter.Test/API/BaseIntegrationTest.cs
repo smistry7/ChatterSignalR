@@ -20,13 +20,5 @@ namespace Chatter.Test.API
         {
             _transactionScope.Dispose();
         }
-        internal ByteArrayContent GetByteContentForObject(object obj)
-        {
-            var jsonObject = JsonConvert.SerializeObject(obj);
-            var buffer = System.Text.Encoding.UTF8.GetBytes(jsonObject);
-            var byteContent = new ByteArrayContent(buffer);
-            byteContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
-            return byteContent;
-        }
     }
 }

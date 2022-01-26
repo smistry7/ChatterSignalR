@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Chatter.BusinessLogic.Models;
+using Microsoft.AspNetCore.Mvc;
 using Refit;
 
 namespace Chatter.APIClient
@@ -20,20 +21,6 @@ namespace Chatter.APIClient
 
         [Post("/message/sendmessage")]
         Task<ApiResponse<int>> SendMessageResponse(Message message);
-
-    }
-
-    public class Message
-    {
-        public int MessageId { get; set; }
-        public string? Text { get; set; }
-        public DateTime SentDate { get; set; }
-        public string? SentBy { get; set; }
-        public int GroupId { get; set; }
-        public override string ToString()
-        {
-            return $"{this.SentBy}: {Text}";
-        }
 
     }
 }

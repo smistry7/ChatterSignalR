@@ -1,10 +1,11 @@
 ﻿@page "/fetchdata"
+@using Chatter.APIClient
 @using Chatter.BusinessLogic.Models;
 @using Newtonsoft.Json;
 @using System.Text;
 @using System.Linq;
 @using Microsoft.AspNetCore.SignalR.Client;
-@inject HttpClient Http
+@inject IChatterApi Http
 @implements IAsyncDisposable
 
 <h1>Weather forecast</h1>
@@ -50,7 +51,7 @@ else
     private HubConnection _hubConnection;
     protected override async Task OnInitializedAsync()
     {
-        forecasts = await Http.GetFromJsonAsync<List<Message>>("message/getmessages");
+        forecasts = (await Http.GetMessages()).ToList();
         _hubConnection = new HubConnectionBuilder()
             .WithUrl("https://localhost:44359/MessageHub")
             .Build();
@@ -68,8 +69,7 @@ else
             GroupId = 1
         };
         var json = JsonConvert.SerializeObject(message);
-        var response = await Http.PostAsync("/Message/SendMessage",
-            new StringContent(json, Encoding.UTF8, "application/json"));
+        var response = await Http.SendMessage(message);
         _messageText = "";
     }
     private void OnMessage(Message message)
