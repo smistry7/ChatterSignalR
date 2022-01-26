@@ -24,21 +24,21 @@ namespace Chatter.API.Controllers
             _hubContext = hubContext;
         }
         [HttpGet]
-        public IActionResult GetMessages()
+        public ActionResult<IEnumerable<Message>> GetMessages()
         {
             var messages = _chatterContext.Messages
                 .OrderByDescending(x => x.SentDate)
                 .Take(10);
-            return Ok(messages);
+            return Ok(messages.ToList());
         }
         [HttpGet]
-        public async Task<IActionResult> GetMessage([FromQuery] int id)
+        public async Task<ActionResult<Message>> GetMessage([FromQuery] int id)
         {
             var message = await _chatterContext.Messages.FindAsync(id).ConfigureAwait(false);
             return Ok(message);
         }
         [HttpPost]
-        public async Task<IActionResult> SendMessage([FromBody] Message message)
+        public async Task<ActionResult<int>> SendMessage([FromBody] Message message)
         {
             var res = _chatterContext.Messages.Add(message);
             await _chatterContext.SaveChangesAsync();

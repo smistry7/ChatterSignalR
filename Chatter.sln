@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30907.101
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chatter.API", "Chatter\Chatter.API.csproj", "{DB99DFD9-1913-4FBD-80A8-1711510B2AEC}"
 EndProject
@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chatter.WpfClient", "Chatte
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chatter.WebClient", "Chatter.WebClient\Chatter.WebClient.csproj", "{4912DB2C-2CD5-4FEC-BE00-AB389E373B30}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatter.Test", "Chatter.Test\Chatter.Test.csproj", "{6B52AA3B-0E41-488C-9AB9-7A411E5A6967}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chatter.Test", "Chatter.Test\Chatter.Test.csproj", "{6B52AA3B-0E41-488C-9AB9-7A411E5A6967}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatter.APIClient", "Chatter.APIClient\Chatter.APIClient.csproj", "{B4E9CC69-1772-420C-8905-8D73CCBFA5EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{6B52AA3B-0E41-488C-9AB9-7A411E5A6967}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B52AA3B-0E41-488C-9AB9-7A411E5A6967}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B52AA3B-0E41-488C-9AB9-7A411E5A6967}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4E9CC69-1772-420C-8905-8D73CCBFA5EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4E9CC69-1772-420C-8905-8D73CCBFA5EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4E9CC69-1772-420C-8905-8D73CCBFA5EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4E9CC69-1772-420C-8905-8D73CCBFA5EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -19,7 +19,7 @@ namespace Chatter.WpfClient.ViewModels
         public MessageViewModel(IObservable<Message> messageObservable, IMessageService messageService)
         {
             Messages = new ObservableCollection<Message>();
-            _messageService = messageService;
+            _messageService = messageService ?? throw new ArgumentNullException(nameof(IMessageService));
             messageObservable.Subscribe(this);
             SetUpSendButton();
         }

@@ -1,4 +1,5 @@
 ﻿using AutoFixture.Xunit2;
+using Chatter.APIClient;
 using Chatter.BusinessLogic.Models;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -26,36 +27,34 @@ namespace Chatter.Test.API
         {
             // arrange
             var client = _factory.CreateClient();
+            var chatterClient = new ApiClientFactory(client).BuildChatterApi();
+
             // act
-            var response = await client.GetAsync("Message/GetMessages").ConfigureAwait(false);
+            var response = await chatterClient.GetMessagesResponse();
             // assert
-            response.EnsureSuccessStatusCode();
+            await response.EnsureSuccessStatusCodeAsync();
 
         }
         [Theory, AutoData]
         [Trait("Category", "Integration")]
-        public async Task SendMessage_AppliesDatabaseInsert(Message message)
+        public async Task SendMessage_AppliesDatabaseInsert(APIClient.Message message)
         {
             // Arrange
             // override messageId as we don't want to insert that to the database.
             message.MessageId = default;
             var client = _factory.CreateClient();
-            var messageBytes = GetByteContentForObject(message);
+            var chatterClient = new ApiClientFactory(client).BuildChatterApi();
+
             // Act
-            // block the call to ensure we don't get the message before the save is completed.
-            var response = client.PostAsync("Message/SendMessage", messageBytes).Result;
+            var response = await chatterClient.SendMessageResponse(message);
+
             // Assert
-            response.EnsureSuccessStatusCode();
-            var id = await response.Content.ReadAsStringAsync();
+            await response.EnsureSuccessStatusCodeAsync();
+            var id = response.Content;
             // retrieve message sent by id returned from post call
-            var messagesResponse = await client.GetAsync($"Message/GetMessage?id={id}").ConfigureAwait(false);
-            var returnedMessage = JsonConvert.DeserializeObject<Message>(
-                await messagesResponse.Content.ReadAsStringAsync().ConfigureAwait(false));
+            var returnedMessage = await chatterClient.GetMessage(id);
             returnedMessage.Text.Should().Be(message.Text);
 
         }
-
-     
-    
     }
 }
